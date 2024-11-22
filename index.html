@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Information Security Day Bingo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas"></script>
+  <style>
+  .bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns for Bingo blocks */
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.bingo-column-headings {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns to align with Bingo blocks */
+  gap: 15px;
+  margin-top: 10px;
+  width: 100%; /* Ensure it spans the same width as the grid */
+}
+
+.column-heading {
+  font-family: 'Poppins', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f5a623;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  text-align: center; /* Center-align text within each column */
+animation: heading-glow 2s ease-in-out infinite alternate;
+}
+	  @keyframes heading-glow {
+  0% { text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5); }
+  100% { text-shadow: 0px 4px 10px rgba(245, 166, 35, 0.8); }
+}
+	  #success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-family: 'Poppins', Arial, sans-serif;
+  animation: fade-in-out 3s ease-in-out;
+}
+
+#success-overlay .celebration-message {
+  font-size: 2rem;
+  text-align: center;
+  background: linear-gradient(45deg, #f5a623, #ff5722);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes text-glow {
+  0% { text-shadow: 0 0 5px #f5a623, 0 0 10px #ff5722; }
+  100% { text-shadow: 0 0 20px #f5a623, 0 0 30px #ff5722; }
+}
+    body {
+      background: linear-gradient(135deg, #22b2e5, #3a3a62);
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #ffffff;
+    }
+
+    h1 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+	  animation: heading-glow 2s ease-in-out infinite alternate;
+    }
+
+    h1 span.highlight {
+      color: #f5a623;
+    }
+
+    .bingo-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: rgba(34, 2, 57, 0.8);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .bingo-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .bingo-card {
+      background: rgba(34, 2, 57, 0.8);
+      color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+      cursor: pointer;
+      height: 120px;
+      position: relative;
+    }
+
+    .bingo-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .bingo-card.selected {
+      background-color: #f5a623;
+      color: #ffffff;
+      animation: pulse 0.4s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .bingo-card .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%);
+      background-color: #f5a623;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 0.7rem;
+      text-align: center;
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .bingo-card:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .bingo-card img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .bingo-card i {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-display {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      margin: 10px;
+      background-color: #f5a623;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #e5941d;
+    }
+
+    @media (max-width: 768px) {
+      .bingo-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .bingo-card {
+        font-size: 0.7rem;
+        height: 100px;
+      }
+
+      .bingo-card i {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bingo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bingo-card {
+        font-size: 0.6rem;
+        height: 90px;
+      }
+
+      .bingo-card i {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bingo-container">
+    <h1><span class="highlight">Information</span> Security Day Bingo</h1>
+    <div class="name-input-container">
+      <input type="text" id="user-name" placeholder="Enter your name" aria-label="Enter your name">
+      <button id="download-image">Download Selected Blocks</button>
+      <button id="share-email">Share via Email</button>
+    </div>
+    <div class="score-display" aria-live="polite">Selected Blocks: <span id="score">0</span>/24</div>
+    <div class="bingo-grid" id="bingo-grid" role="grid"></div>
+	<div class="bingo-column-headings">
+    <div class="column-heading">Phishing</div>
+    <div class="column-heading">Encryption</div>
+    <div class="column-heading">Malware</div>
+    <div class="column-heading">Access</div>
+    <div class="column-heading">Biometrics</div>
+  </div>
+	</div>
+  <script>
+    const bingoGrid = document.querySelector('#bingo-grid');
+    const downloadButton = document.getElementById('download-image');
+    const shareButton = document.getElementById('share-email');
+    const userNameInput = document.getElementById('user-name');
+    const scoreDisplay = document.getElementById('score');
+
+    let selectedCount = 0;
+
+    const bingoItems = [
+      { front: "Ensured visitors were signed in and accompanied", icon: "fas fa-user-check", info: "Signing in and escorting visitors prevents unauthorized access to sensitive areas, protecting physical and digital assets, and reducing the risk of breaches." },
+      { front: "Verified security before entering information", icon: "fas fa-shield-alt", info: "Verifying secure connections and ensuring AI tools don’t store prompts protects against data interception and unintended data exposure, reducing security incidents." },
+      { front: "Logged out of an application after use", icon: "fas fa-sign-out-alt", info: "Logging out prevents unauthorized access or misuse of accounts if a device is left unlocked or compromised, securing sensitive data and reducing risks." },
+      { front: "Shared info via SharePoint with restrictions", icon: "fas fa-share-alt", info: "Using SharePoint/OneDrive ensures better control over shared data, preventing unauthorized downloading, forwarding, or editing, and protecting sensitive information." },
+      { front: "Disposed sensitive info securely using a shredder", icon: "fas fa-trash-alt", info: "Shredding sensitive documents ensures they cannot be reconstructed or accessed by unauthorized individuals, maintaining confidentiality and reducing risks." },
+      { front: "Updated a weak password to a secure one", icon: "fas fa-lock", info: "A strong, unique password reduces the risk of unauthorized access by preventing attackers from exploiting compromised credentials." },
+      { front: "Recognized and avoided phishing attempts", icon: "fas fa-exclamation-triangle", info: "Avoiding phishing attempts reduces the risk of revealing sensitive data or downloading malicious software, protecting both personal and company information." },
+      { front: "Reported a security concern to IT", icon: "fas fa-flag", info: "Reporting concerns helps identify threats early, reducing the risk of breaches and protecting systems and data from compromise." },
+      { front: "Closed an open/unlocked security door", icon: "fas fa-door-closed", info: "Securing doors prevents unauthorized access to restricted areas, protecting sensitive data and assets from theft or potential breaches." },
+      { front: "Stayed alert to screen privacy in public spaces", icon: "fas fa-eye-slash", info: "Being mindful of screen visibility prevents sensitive data from being exposed to unauthorized individuals, protecting confidentiality." },
+      { front: "Revised departmental policies", icon: "fas fa-file-alt", info: "Revising policies ensures they address evolving security risks, keeping protections up to date and relevant." },
+      { front: "Reviewed user access permissions", icon: "fas fa-users-cog", info: "Regularly reviewing permissions ensures only authorized individuals can access sensitive data, reducing the risk of breaches or misuse." },
+      { image: "https://eatechnology.com/media/3aupxa3t/bingo-centre.png" }, // Non-selectable Centre Block
+      { front: "Shared a security tip with a colleague", icon: "fas fa-lightbulb", info: "Sharing security tips helps reduce human error and strengthens the organization’s collective security posture, mitigating potential threats." },
+      { front: "Reported suspicious behavior", icon: "fas fa-search", info: "Reporting suspicious behavior helps identify and address potential threats early, reducing the risk of breaches and protecting assets." },
+      { front: "Revisited security policies and best practices", icon: "fas fa-book-open", info: "Staying informed about security practices helps mitigate risks by ensuring employees follow the latest, most effective protection measures." },
+      { front: "Updated device with the latest patches", icon: "fas fa-tools", info: "Regular updates protect against known vulnerabilities, reducing the risk of malware infections or data breaches." },
+      { front: "Enabled two-factor authentication", icon: "fas fa-key", info: "2FA adds an extra layer of protection, reducing the risk of unauthorized access even if passwords are compromised." },
+      { front: "Used VPN for secure remote work", icon: "fas fa-network-wired", info: "Using a VPN encrypts connections, protecting sensitive data from interception, particularly on public or unsecured networks." },
+      { front: "Re-classified a document's security category", icon: "fas fa-folder", info: "Correct classification ensures sensitive data is properly protected, reducing the risk of exposure or inaccessibility." },
+      { front: "Only used a company-issued USB device for data transfer", icon: "fas fa-usb", info: "Using approved USB devices reduces the risk of malware or data breaches, ensuring secure transfers." },
+      { front: "Anonymized sensitive info before sharing", icon: "fas fa-user-secret", info: "Anonymization prevents the exposure of sensitive data, ensuring compliance with privacy laws and reducing the risk of breaches." },
+      { front: "Encrypted sensitive emails", icon: "fas fa-envelope-open-text", info: "Email encryption protects sensitive information from unauthorized access, ensuring confidentiality and mitigating risks of data theft." },
+      { front: "Conducted a GDPR compliance audit", icon: "fas fa-balance-scale", info: "Reviewing data retention practices ensures compliance with GDPR, reduces unnecessary data exposure, and mitigates the risk of regulatory fines." },
+      { front: "Avoided oversharing sensitive info on social media", icon: "fas fa-user-shield", info: "Avoiding oversharing reduces the risk of identity theft, social engineering attacks, and data breaches by keeping sensitive information secure." }
+    ];
+
+    // Add sound effect for selection
+const selectionSound = new Audio('https://eatechnology.com/media/zxbljspx/click-sound.mp3');
+
+bingoItems.forEach(({ front, icon, image, info }) => {
+  const card = document.createElement('div');
+  card.classList.add('bingo-card');
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-pressed', 'false');
+
+  if (image) {
+    card.innerHTML = `<img src="${image}" alt="Bingo Centre">`;
+  } else {
+    card.innerHTML = `
+      <i class="${icon}" aria-hidden="true"></i>
+      <p>${front}</p>
+      <div class="tooltip" aria-hidden="true">${info}</div>
+    `;
+  }
+
+  // Play sound and toggle selection on click
+  card.addEventListener('click', () => {
+    selectionSound.play(); // Play selection sound
+    card.classList.toggle('selected');
+    const isSelected = card.classList.contains('selected');
+    card.setAttribute('aria-pressed', isSelected);
+    selectedCount += isSelected ? 1 : -1;
+    scoreDisplay.textContent = selectedCount;
+  });
+
+  bingoGrid.appendChild(card);
+});
+
+    downloadButton.addEventListener('click', () => {
+  const userName = userNameInput.value.trim();
+  if (!userName) {
+    alert('Please enter your name before downloading!');
+    return;
+  }
+		
+		// Show the success overlay
+  const successOverlay = document.getElementById('success-overlay');
+  successOverlay.style.display = 'flex';
+
+  // Hide the overlay after 3 seconds
+  setTimeout(() => {
+    successOverlay.style.display = 'none';
+  }, 5000);
+
+  const nameElement = document.createElement('div');
+  nameElement.textContent = `Name: ${userName}`;
+  bingoGrid.insertAdjacentElement('beforebegin', nameElement);
+
+  html2canvas(document.querySelector('.bingo-container')).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `${userName}_bingo-selected.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+    nameElement.remove();
+    shareButton.dataset.imageUrl = canvas.toDataURL();
+    alert('Download complete! You can now share via email. Don’t forget to attach the downloaded image.');
+  });
+});
+
+shareButton.addEventListener('click', () => {
+  const userName = userNameInput.value.trim();
+  if (!userName) {
+    alert('Please enter your name before sharing!');
+    return;
+  }
+
+  const imageUrl = shareButton.dataset.imageUrl;
+  if (!imageUrl) {
+    alert('Please download the bingo image first!');
+    return;
+  }
+
+  const emailTo = 'katee.houston@eatechnology.com';
+  const emailSubject = encodeURIComponent(`Bingo Completed by ${userName}`);
+  const emailBody = encodeURIComponent(
+    `Hi Katee,\n\nI just completed the Information Security Day Bingo! Please find my progress attached.\n\nBest,\n${userName}`
+  );
+  window.location.href = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`;
+});
+
+  </script>
+	<div id="success-overlay">
+  <div class="celebration-message">
+    🎉 Bingo Completed! 🎉
+  </div>
+</div>
+</body>
+</html>
